@@ -11,6 +11,7 @@ import { ProductService } from './product.service';
 export class ProductsComponent implements OnInit {
   pageTitle: string = 'Product List';
   private _productService;
+  errorMessage: string;
 
   private _listFilter: string;
   public get listFilter(): string {
@@ -40,9 +41,15 @@ export class ProductsComponent implements OnInit {
 
   constructor(private productService: ProductService) { }
 
-  ngOnInit() {
-    this.products = this.productService.getProducts();
-    this.filteredProducts = this.products;
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe(
+      products => {
+        this.products = products;
+        this.filteredProducts = this.products;
+      },
+      error => this.errorMessage = <any>error
+    );
+    
   }
 
 }
